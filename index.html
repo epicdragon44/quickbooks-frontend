@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QuickBooks Server Registration</title>
+
+    <style>
+        body {
+            width: 35em;
+            margin: 0 auto;
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+        }
+
+        #theiframe {
+            display: none;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script type="text/JavaScript">
+        function createNewElement() {
+            //add a new element below
+            $( '<div class="xmlrequestbox"><label for="msg">Enter XML Request:</label><textarea class="xmlrequestarea" name="xmlrequest"></textarea></div><div id="newElementId"></div>' ).insertAfter( $('[id^="newElementId"]').last() ); //using jquery
+        }
+    </script>
+
+    <script>
+        function loadnewpage(newsrc){ //simulate an http request, essentially, by visiting the page in an iframe
+            var newloc = newsrc;
+
+            console.log('loading the following page');
+            console.log(newloc);
+
+            document.getElementById('theiframe').setAttribute('src', newloc);
+        }
+    </script>
+
+    <script>
+        function doSomething() {
+
+            let fields = '';
+
+            //get username/password
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            let filepath = document.getElementById("filepath").value;
+
+            fields = fields + 'username=' + username + "&";
+            fields = fields + 'password=' + password + "&";
+            fields = fields + 'filepath=' + filepath + "&";
+
+            //get all the xmls using jquery
+            // let count = 0;
+            // $(".xmlrequestarea").each(
+            //     function() {
+            //         count++;
+            //         console.log($(this).val);
+            //         let userValue = $(this).val;
+            //         fields = fields + 'xml' + count + "=" + userValue + "&";
+            //     }
+            // );
+
+            let count = 0;
+            jQuery("textarea.xmlrequestarea").each(function(){
+                let userValue = jQuery(this).val();
+                count++;
+                fields = fields + 'xml' + count + "=" + userValue + "&";
+            })
+
+            loadnewpage('http://104.131.54.68:8099/?' + fields);
+
+            alert('Submitted!');
+
+            return false;
+        }
+    </script>
+
+</head>
+<body>
+<h1>Welcome to QuickBooks Server Registration!</h1>
+<p>Enter the appropriate information below to set up an account on our QuickBooks Server.</p>
+<hr>
+<form onsubmit="doSomething();" class="my-form">
+    <ul>
+        <li>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+        </li>
+        <li>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+        </li>
+        <li>
+            <label for="filepath">QuickBooks Company File Path:</label>
+            <input type="text" id="filepath" name="filepath">
+        </li>
+        <hr>
+        <li>            
+            <div class="xmlrequestbox">
+                <label for="msg">Enter XML Request:</label>
+                <textarea class="xmlrequestarea" name="xmlrequest"></textarea>
+            </div>
+
+            <div id="newElementId"></div>
+
+            <div id="dynamicCheck">
+                <input type="button" value="Add Another XML" onClick="createNewElement();"/>
+            </div>
+        </li>
+    </ul>
+    <input type="submit" value="Submit">
+</form>
+
+<iframe src="https://google.com/" id="theiframe" width="500" marginwidth="0" height="500" marginheight="0" scrolling="auto"></iframe>
+
+</body>
+</html>
