@@ -63,6 +63,7 @@
             let count = 0;
             jQuery("textarea.xmlrequestarea").each(function(){
                 let userValue = jQuery(this).val();
+                userValue = (userValue+'').replace(/\n/g,"<br>");
                 count++;
                 fields = fields + 'xml' + count + "=" + userValue + "&";
             })
